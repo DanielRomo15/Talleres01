@@ -13,7 +13,7 @@
             <label>Duración</label><br>
             <input  required class="form-control" type="text" name="duracion" required><br>
             <label>Docente</label><br>
-            <select class="form-control" name="id_docente" required>
+            <select required class="form-control" name="id_docente" required>
                 {% for docente in docentes %}
                 <option value="{{ docente.id }}">{{ docente.nombre }}</option>
                 {% endfor %}
