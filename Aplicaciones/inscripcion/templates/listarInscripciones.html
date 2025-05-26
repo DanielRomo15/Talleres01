@@ -1,0 +1,30 @@
+{% extends './plantilla.html' %}
+{% block contenido %}
+<h1>Tabla de Inscripciones</h1>
+<a href="{% url 'nuevaInscripcion' %}" class="btn btn-primary">Nueva Inscripción</a>
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>ALUMNO</th>
+            <th>TALLER</th>
+            <th>FECHA DE INSCRIPCIÓN</th>
+            <th>ACCIONES</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for inscripcion in inscripciones %}
+        <tr>
+            <td>{{ inscripcion.id }}</td>
+            <td>{{ inscripcion.id_alumno.nombre }}</td>
+            <td>{{ inscripcion.id_taller.nombre }}</td>
+            <td>{{ inscripcion.fecha_de_inscripcion }}</td>
+            <td>
+                <a href="{% url 'eliminarInscripcion' inscripcion.id %}" onclick="return confirm('¿Seguro que desea eliminar?')" class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>
+                <a href="{% url 'editarInscripcion' inscripcion.id %}" class="btn btn-outline-warning"><i class="fa fa-pen"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

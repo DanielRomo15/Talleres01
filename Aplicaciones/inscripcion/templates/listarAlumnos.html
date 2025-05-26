@@ -1,0 +1,30 @@
+{% extends './plantilla.html' %}
+{% block contenido %}
+<h1>Tabla de Alumnos</h1>
+<a href="{% url 'nuevoAlumno' %}" class="btn btn-primary">Agregar Alumno</a>
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>NOMBRE</th>
+            <th>EDAD</th>
+            <th>CORREO</th>
+            <th>ACCIONES</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for alumno in alumnos %}
+        <tr>
+            <td>{{ alumno.id }}</td>
+            <td>{{ alumno.nombre }}</td>
+            <td>{{ alumno.edad }}</td>
+            <td>{{ alumno.correo }}</td>
+            <td>
+                <a href="{% url 'eliminarAlumno' alumno.id %}" onclick="return confirm('¿Seguro que desea eliminar?')" class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>
+                <a href="{% url 'editarAlumno' alumno.id %}" class="btn btn-outline-warning"><i class="fa fa-pen"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

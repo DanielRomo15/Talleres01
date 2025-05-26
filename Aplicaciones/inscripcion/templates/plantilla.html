@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Gestión de Talleres</title>
+    
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" />
+    
+    <!-- Material Design Icons (equivalente a zmdi) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.3.67/css/materialdesignicons.min.css" />
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- jQuery (necesario para algunas funcionalidades de SBP) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    
+    <!-- Material Design (similar a lo usado en SBP) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/4.0.2/bootstrap-material-design.umd.min.js"></script>
+    
+    <!-- Custom Scrollbar (similar a mCustomScrollbar) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+    
+    <style>
+        /* Estilos principales basados en SBP */
+        :root {
+            --primary-color: #3F51B5;
+            --primary-color-dark: #303F9F;
+            --accent-color: #FF5722;
+            --accent-color-dark: #D84315;
+            --text-color: #333;
+            --background-color: #F5F5F5;
+            --success-color: #4CAF50;
+            --danger-color: #F44336;
+            --warning-color: #FFC107;
+            --info-color: #2196F3;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+        
+        /* SideBar */
+        .dashboard-sideBar {
+            position: fixed;
+            width: 270px;
+            height: 100%;
+            background-color: #fff;
+            z-index: 998;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all .3s ease-in-out;
+            left: 0;
+        }
+        
+        .dashboard-sideBar-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNui8sowAAAANdEVYdENyZWF0aW9uIHRpbWUAOZ6OcAAAAR1JREFUSA3tVz2OgzAQZdMgpXTpKZZyA0pvkwtEvQfKlhuEG2SPQBnlBilTugmleye2FCmWYcbG3joUjGTwfDzPnwmJMfYCZGkYhjemaWJZlpvg5l0u13e29yXVruvOlFLcsiy3LMsGQRBgWZY7z/ML/T7ljOM4SpIkJoQADmJ8tG0bGGPgnIOmacA5j77vw8TP/FTKOI6TMAwFWpIQAkII4JzbPmmaf9/3hU5fmpWapoE8z4Fx9ozj+K4oimCe54v3viGlBCHEz/rYGVbU8zy/UEqP2rbdEEKufQQhhKXruuu6LtR13ZqmOWVZdo3jeGA2RpIkFyHEr/k7+hLmzV/9GmLgb7Vfc0W7jIdXKCHkuO/HmMDr9foBCBrzOX6e/AXKC+jzKDrV1wAAAABJRU5ErkJggg==');
+            background-position: center center;
+            background-repeat: repeat;
+            z-index: 999;
+            display: none;
+        }
+        
+        .dashboard-sideBar-ct {
+            position: relative;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.77);
+            padding: 0;
+            z-index: 1000;
+            transition: all .3s ease-in-out;
+        }
+        
+        .dashboard-sideBar-title {
+            height: 50px;
+            line-height: 50px;
+            color: #fff;
+            background-color: var(--primary-color);
+            font-size: 20px;
+        }
+        
+        .dashboard-sideBar-title i {
+            position: relative;
+            float: right;
+            margin: 0 15px;
+            line-height: 50px;
+            cursor: pointer;
+            display: none;
+        }
+        
+        .dashboard-sideBar-UserInfo {
+            padding: 20px 0;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+        
+        .dashboard-sideBar-UserInfo figure img {
+            width: 100px;
+            height: 100px;
+            border-radius: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .dashboard-sideBar-UserInfo figcaption {
+            margin-top: 15px;
+        }
+        
+        .dashboard-sideBar-UserInfo ul {
+            margin-top: 20px;
+        }
+        
+        .dashboard-sideBar-UserInfo ul li {
+            display: inline-block;
+            margin: 0 5px;
+        }
+        
+        .dashboard-sideBar-UserInfo ul li a {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            color: #fff;
+            border: 1px solid #fff;
+            border-radius: 100%;
+            transition: all .3s ease-in-out;
+        }
+        
+        .dashboard-sideBar-UserInfo ul li a:hover {
+            color: var(--primary-color);
+            background-color: #fff;
+        }
+        
+        .dashboard-sideBar-Menu {
+            padding-top: 15px;
+        }
+        
+        .dashboard-sideBar-Menu > li,
+        .dashboard-sideBar-Menu > li > a,
+        .dashboard-sideBar-Menu > li > ul > li,
+        .dashboard-sideBar-Menu > li > ul > li > a {
+            line-height: 50px;
+            font-weight: 300;
+            font-size: 14px;
+            position: relative;
+            display: block;
+            color: #fff;
+            transition: all .3s ease-in-out;
+        }
+        
+        .dashboard-sideBar-Menu > li > a > i.zmdi-caret-down {
+            line-height: 50px;
+            transition: all .3s ease-in-out;
+        }
+        
+        .dashboard-sideBar-Menu > li > a:hover {
+            color: var(--primary-color);
+        }
+        
+        .dashboard-sideBar-Menu > li > ul {
+            position: relative;
+            padding-top: 7px;
+            height: 0;
+            overflow: hidden;
+            transition: all .3s ease-in-out;
+        }
+        
+        .dashboard-sideBar-Menu > li > ul > li {
+            line-height: 30px;
+        }
+        
+        .dashboard-sideBar-Menu > li > ul > li:last-child {
+            padding-bottom: 7px;
+        }
+        
+        .dashboard-sideBar-Menu > li > ul > li > a {
+            line-height: 30px;
+            border-left: 3px solid transparent;
+            padding-left: 20px;
+        }
+        
+        .dashboard-sideBar-Menu > li > ul > li > a:hover {
+            border-left: 3px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        /* Navbar */
+        .dashboard-contentPage {
+            position: relative;
+            background-color: #FAFAFA;
+            z-index: 0;
+            width: 100%;
+            padding-left: 270px;
+            transition: all .3s ease-in-out;
+        }
+        
+        .dashboard-Navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            height: 50px;
+            overflow: hidden;
+        }
+        
+        .dashboard-Navbar ul {
+            padding: 0;
+            margin: 0;
+        }
+        
+        .dashboard-Navbar ul li {
+            display: inline-block;
+        }
+        
+        .dashboard-Navbar ul li a {
+            color: var(--text-color);
+            font-size: 15px;
+            transition: all .3s ease-in-out;
+            padding: 0 7px;
+            line-height: 50px;
+        }
+        
+        .dashboard-Navbar ul li a:hover {
+            color: var(--primary-color);
+        }
+        
+        /* Titles and content */
+        .text-titles {
+            font-family: 'Roboto', sans-serif;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .page-header {
+            margin-bottom: 15px;
+            padding-top: 15px;
+        }
+        
+        /* Tiles */
+        .tile {
+            display: inline-block;
+            width: 25%;
+            background-color: #fff;
+            height: auto;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 0 15px;
+            transition: all .3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+            padding-bottom: 15px;
+        }
+        
+        .tile:hover {
+            box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tile-title,
+        .tile-icon,
+        .tile-number {
+            position: relative;
+            padding: 7px;
+        }
+        
+        .tile-title {
+            background-color: var(--primary-color);
+            color: #fff;
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .tile-icon {
+            font-size: 50px;
+            line-height: 50px;
+            color: var(--primary-color);
+        }
+        
+        /* Media queries */
+        @media (max-width: 991px) {
+            .dashboard-sideBar {
+                width: 100%;
+                z-index: 99999;
+                background-color: transparent;
+                display: none;
+            }
+            
+            .dashboard-sideBar-ct {
+                background-color: rgba(0, 0, 0, .65);
+            }
+            
+            .dashboard-sideBar-bg {
+                display: block;
+            }
+            
+            .dashboard-contentPage {
+                padding-left: 0;
+            }
+        }
+        
+        /* Tablas */
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table-bordered {
+            border: 1px solid #f0f0f0;
+        }
+        
+        .table thead th {
+            border-bottom: 2px solid #f0f0f0;
+            color: var(--primary-color);
+        }
+        
+        .table td, .table th {
+            border-top: 1px solid #f0f0f0;
+            padding: 15px;
+        }
+        
+        /* Botones */
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color-dark);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-color-dark);
+        }
+        
+        .btn-circle {
+            border-radius: 100%;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Card */
+        .card {
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 5px 5px 0 0 !important;
+            padding: 15px;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #3F51B5;
+            padding: 15px 0;
+            margin-top: 30px;
+            box-shadow: 0 -2px 5px #eff2f21a;
+        }
+        
+        /* Menu Activado */
+        .show-menu-options {
+            height: auto !important;
+        }
+        
+        .show-menu-options-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+    <!-- SideBar -->
+    <section class="full-box cover dashboard-sideBar">
+        <div class="full-box dashboard-sideBar-bg btn-menu-dashboard"></div>
+        <div class="full-box dashboard-sideBar-ct">
+            <!-- SideBar Title -->
+            <div class="full-box text-uppercase text-center text-titles dashboard-sideBar-title">
+                Talleres <i class="mdi mdi-close btn-menu-dashboard visible-xs"></i>
+            </div>
+            
+            <!-- SideBar User info -->
+            <div class="full-box dashboard-sideBar-UserInfo">
+                <figure class="full-box">   
+                    <div class="col-md-4 text-center">
+                        <img height="100px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThlFLIrVMli4ZGnqd4p0PyGDzL_NnorVdo4A&s">
+                    </div>
+                    <figcaption class="text-center text-titles">Sistema de Talleres</figcaption>
+                </figure>
+                <ul class="full-box list-unstyled text-center">
+                    <li>
+                        <a href="/" title="Inicio">
+                            <i class="mdi mdi-home"></i>
+                        </a>
+                    </li>
+                    <li>
+                        
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- SideBar Menu -->
+            <ul class="list-unstyled full-box dashboard-sideBar-Menu">
+                <li>
+                    <a href="/">
+                        <i class="mdi mdi-view-dashboard mdi-hc-fw"></i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="#!" class="btn-sideBar-SubMenu">
+                        <i class="mdi mdi-school mdi-hc-fw"></i> Gestión Académica <i class="mdi mdi-chevron-down pull-right"></i>
+                    </a>
+                    <ul class="list-unstyled full-box">
+                        <li>
+                            <a href="{% url 'listarDocentes' %}"><i class="mdi mdi-teach mdi-hc-fw"></i> Docentes</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'listarTalleres' %}"><i class="mdi mdi-book-open-page-variant mdi-hc-fw"></i> Talleres</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'listarAlumnos' %}"><i class="mdi mdi-account-school mdi-hc-fw"></i> Alumnos</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'listarInscripciones' %}"><i class="mdi mdi-clipboard-list mdi-hc-fw"></i> Inscripciones</a>
+                        </li>
+                    </ul>
+                </li>
+                
+            </ul>
+        </div>
+    </section>
+
+    <!-- Content page-->
+    <section class="full-box dashboard-contentPage">
+        <!-- NavBar -->
+        <nav class="full-box dashboard-Navbar">
+            <ul class="full-box list-unstyled text-right">
+                <li class="pull-left">
+                    <a href="#!" class="btn-menu-dashboard"><i class="mdi mdi-menu"></i></a>
+                </li>
+                
+            </ul>
+        </nav>
+        
+        <!-- Content page -->
+        <div class="container-fluid">
+            {% block contenido %}
+            <!-- Aquí va el contenido de cada página -->
+            {% endblock %}
+        </div>
+        
+        <!-- Footer -->
+        <footer class="full-box">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <img height="150px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaIgraZLZqXucZY8ZDcWNCcUmCqELc-rbCNA&s">
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <h4><b>Desarrollado por:</b></h4>
+                        <h5>Juan Tipanluisa</h5>
+                        <h5>Daniel Romo</h5>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <h1>Latacunga-2025</h1>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        $(document).ready(function(){
+            // Control del menú lateral
+            $('.btn-menu-dashboard').on('click', function(e){
+                e.preventDefault();
+                if($('.dashboard-sideBar').css('pointer-events') == 'none'){
+                    $('.dashboard-sideBar').css({'pointer-events':'auto'});
+                    $('.dashboard-sideBar').animate({'left':'0'});
+                    $('.dashboard-sideBar-ct').animate({'left':'0'});
+                    $('.dashboard-contentPage').animate({'padding-left':'270px'});
+                }else{
+                    $('.dashboard-sideBar').css({'pointer-events':'none'});
+                    $('.dashboard-sideBar').animate({'left':'-270px'});
+                    $('.dashboard-sideBar-ct').animate({'left':'-270px'});
+                    $('.dashboard-contentPage').animate({'padding-left':'0'});
+                }
+            });
+            
+            // Control de submenús
+            $('.btn-sideBar-SubMenu').on('click', function(e){
+                e.preventDefault();
+                let nextElement = $(this).next('ul');
+                let iconElement = $(this).find('.mdi-chevron-down');
+                
+                if(nextElement.hasClass('show-menu-options')){
+                    nextElement.removeClass('show-menu-options');
+                    iconElement.removeClass('show-menu-options-icon');
+                }else{
+                    nextElement.addClass('show-menu-options');
+                    iconElement.addClass('show-menu-options-icon');
+                }
+            });
+            
+            // Media query para dispositivos móviles
+            const mediaQuery = window.matchMedia('(max-width: 991px)');
+            mediaQuery.addEventListener('change', handleDeviceChange);
+            
+            function handleDeviceChange(e) {
+                if (e.matches) {
+                    // Dispositivos móviles
+                    $('.dashboard-sideBar').css({'pointer-events':'none'});
+                    $('.dashboard-sideBar').css({'left':'-270px'});
+                    $('.dashboard-sideBar-ct').css({'left':'-270px'});
+                    $('.dashboard-contentPage').css({'padding-left':'0'});
+                } else {
+                    // Dispositivos de escritorio
+                    $('.dashboard-sideBar').css({'pointer-events':'auto'});
+                    $('.dashboard-sideBar').css({'left':'0'});
+                    $('.dashboard-sideBar-ct').css({'left':'0'});
+                    $('.dashboard-contentPage').css({'padding-left':'270px'});
+                }
+            }
+            
+            // Verificar tamaño de pantalla al cargar
+            handleDeviceChange(mediaQuery);
+        });
+    </script>
+
+    {% if messages %}
+        {% for mensaje in messages %}
+            <script>
+                Swal.fire({
+                    title: "Confirmación",
+                    text: "{{ mensaje }}",
+                    icon: "success"
+                });
+            </script>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>

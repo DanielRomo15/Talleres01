@@ -1,0 +1,22 @@
+{% extends './plantilla.html' %}
+{% block contenido %}
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 bg-light">
+        <h1>Editar Alumno</h1>
+        <form action="{% url 'procesarEdicionAlumno' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ alumnoEditar.id }}">
+            <label>Nombre</label><br>
+            <input class="form-control" type="text" name="nombre" value="{{ alumnoEditar.nombre }}" required><br>
+            <label>Edad</label><br>
+            <input class="form-control" type="number" name="edad" value="{{ alumnoEditar.edad }}" required><br>
+            <label>Correo</label><br>
+            <input class="form-control" type="email" name="correo" value="{{ alumnoEditar.correo }}" required><br>
+            <button class="btn btn-primary" type="submit">Actualizar</button>
+            <a class="btn btn-outline-danger" href="{% url 'listarAlumnos' %}">Cancelar</a>
+        </form>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+{% endblock %}

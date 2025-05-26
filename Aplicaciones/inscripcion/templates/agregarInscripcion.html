@@ -1,0 +1,29 @@
+{% extends './plantilla.html' %}
+{% block contenido %}
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 bg-light">
+        <h1>Nueva Inscripción</h1>
+        <form action="{% url 'guardarInscripcion' %}" method="post">
+            {% csrf_token %}
+            <label>Alumno</label><br>
+            <select class="form-control" name="id_alumno" required>
+                {% for alumno in alumnos %}
+                <option value="{{ alumno.id }}">{{ alumno.nombre }}</option>
+                {% endfor %}
+            </select><br>
+            <label>Taller</label><br>
+            <select class="form-control" name="id_taller" required>
+                {% for taller in talleres %}
+                <option value="{{ taller.id }}">{{ taller.nombre }}</option>
+                {% endfor %}
+            </select><br>
+            <label>Fecha de inscripción</label><br>
+            <input class="form-control" type="date" name="fecha_de_inscripcion" required><br>
+            <button class="btn btn-success" type="submit">Guardar</button>
+            <a class="btn btn-outline-danger" href="{% url 'listarInscripciones' %}">Cancelar</a>
+        </form>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+{% endblock %}

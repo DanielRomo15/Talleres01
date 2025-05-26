@@ -1,0 +1,27 @@
+{% extends './plantilla.html' %}
+{% block contenido %}
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 bg-light">
+        <h1>Nuevo Taller</h1>
+        <form action="{% url 'guardarTaller' %}" method="post">
+            {% csrf_token %}
+            <label>Nombre</label><br>
+            <input class="form-control" type="text" name="nombre" required><br>
+            <label>Cupo</label><br>
+            <input class="form-control" type="number" name="cupo" required><br>
+            <label>Duración</label><br>
+            <input class="form-control" type="text" name="duracion" required><br>
+            <label>Docente</label><br>
+            <select class="form-control" name="id_docente" required>
+                {% for docente in docentes %}
+                <option value="{{ docente.id }}">{{ docente.nombre }}</option>
+                {% endfor %}
+            </select><br>
+            <button class="btn btn-success" type="submit">Guardar</button>
+            <a class="btn btn-outline-danger" href="{% url 'listarTalleres' %}">Cancelar</a>
+        </form>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+{% endblock %}

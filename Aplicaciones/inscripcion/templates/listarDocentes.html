@@ -1,0 +1,30 @@
+{% extends './plantilla.html' %}
+{% block contenido %}
+<h1>Tabla de Docentes</h1>
+<a href="{% url 'nuevoDocente' %}" class="btn btn-primary">Agregar Docente</a>
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>NOMBRE</th>
+            <th>ESPECIALIDAD</th>
+            <th>CORREO</th>
+            <th>ACCIONES</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for docente in docentes %}
+        <tr>
+            <td>{{ docente.id }}</td>
+            <td>{{ docente.nombre }}</td>
+            <td>{{ docente.especialidad }}</td>
+            <td>{{ docente.correo }}</td>
+            <td>
+                <a href="{% url 'eliminarDocente' docente.id %}" onclick="return confirm('¿Seguro que desea eliminar?')" class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>
+                <a href="{% url 'editarDocente' docente.id %}" class="btn btn-outline-warning"><i class="fa fa-pen"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

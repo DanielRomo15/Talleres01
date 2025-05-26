@@ -1,0 +1,32 @@
+{% extends './plantilla.html' %}
+{% block contenido %}
+<h1>Tabla de Talleres</h1>
+<a href="{% url 'nuevoTaller' %}" class="btn btn-primary">Agregar Taller</a>
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>NOMBRE</th>
+            <th>CUPO</th>
+            <th>DURACIÓN</th>
+            <th>DOCENTE</th>
+            <th>ACCIONES</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for taller in talleres %}
+        <tr>
+            <td>{{ taller.id }}</td>
+            <td>{{ taller.nombre }}</td>
+            <td>{{ taller.cupo }}</td>
+            <td>{{ taller.duracion }}</td>
+            <td>{{ taller.id_docente.nombre }}</td>
+            <td>
+                <a href="{% url 'eliminarTaller' taller.id %}" onclick="return confirm('¿Seguro que desea eliminar?')" class="btn btn-outline-danger"><i class="fa fa-trash"></i></a>
+                <a href="{% url 'editarTaller' taller.id %}" class="btn btn-outline-warning"><i class="fa fa-pen"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

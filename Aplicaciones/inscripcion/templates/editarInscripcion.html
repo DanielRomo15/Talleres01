@@ -1,0 +1,30 @@
+{% extends './plantilla.html' %}
+{% block contenido %}
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 bg-light">
+        <h1>Editar Inscripción</h1>
+        <form action="{% url 'procesarEdicionInscripcion' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ inscripcionEditar.id }}">
+            <label>Alumno</label><br>
+            <select class="form-control" name="id_alumno" required>
+                {% for alumno in alumnos %}
+                <option value="{{ alumno.id }}" {% if alumno.id == inscripcionEditar.id_alumno.id %}selected{% endif %}>{{ alumno.nombre }}</option>
+                {% endfor %}
+            </select><br>
+            <label>Taller</label><br>
+            <select class="form-control" name="id_taller" required>
+                {% for taller in talleres %}
+                <option value="{{ taller.id }}" {% if taller.id == inscripcionEditar.id_taller.id %}selected{% endif %}>{{ taller.nombre }}</option>
+                {% endfor %}
+            </select><br>
+            <label>Fecha de inscripción</label><br>
+            <input class="form-control" type="date" name="fecha_de_inscripcion" value="{{ inscripcionEditar.fecha_de_inscripcion|date:'Y-m-d' }}" required><br>
+            <button class="btn btn-primary" type="submit">Actualizar</button>
+            <a class="btn btn-outline-danger" href="{% url 'listarInscripciones' %}">Cancelar</a>
+        </form>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+{% endblock %}

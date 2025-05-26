@@ -1,0 +1,20 @@
+{% extends './plantilla.html' %}
+
+{% block contenido %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inicio</title>
+</head>
+<body>
+    <h1>Bienvenido al sistema de talleres de arte</h1>
+    <ul>
+        <li><a href="{% url 'listarDocentes' %}">Docentes</a></li>
+        <li><a href="{% url 'listarTalleres' %}">Talleres</a></li>
+        <li><a href="{% url 'listarAlumnos' %}">Alumnos</a></li>
+        <li><a href="{% url 'listarInscripciones' %}">Inscripciones</a></li>
+    </ul>
+</body>
+</html>
+{% endblock %}
