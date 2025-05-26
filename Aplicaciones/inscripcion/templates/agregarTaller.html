@@ -7,11 +7,11 @@
         <form action="{% url 'guardarTaller' %}" method="post">
             {% csrf_token %}
             <label>Nombre</label><br>
-            <input class="form-control" type="text" name="nombre" required><br>
+            <input required class="form-control" type="text" name="nombre" required><br>
             <label>Cupo</label><br>
-            <input class="form-control" type="number" name="cupo" required><br>
+            <input  required class="form-control" type="number" name="cupo" required><br>
             <label>Duración</label><br>
-            <input class="form-control" type="text" name="duracion" required><br>
+            <input  required class="form-control" type="text" name="duracion" required><br>
             <label>Docente</label><br>
             <select class="form-control" name="id_docente" required>
                 {% for docente in docentes %}
