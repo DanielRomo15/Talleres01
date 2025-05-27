@@ -18,4 +18,13 @@
     </div>
     <div class="col-md-3"></div>
 </div>
+<!--Embeber coidgo javascript/jquery dentro del HTML-->
+<script>
+    $("#frm_nuevo_cargo").validate({
+        rules:{
+            "nombre":{
+                required:true,
+                minlength:5,//cuantos caracteres
+                maxlength:20 //caracteres maximos
+            },
 {% endblock %}
